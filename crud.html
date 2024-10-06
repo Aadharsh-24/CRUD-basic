@@ -1,0 +1,161 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            background-color: #e5a0a0;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            color: brown;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .form-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .form-container input {
+            width: 80%;
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .form-container button {
+            padding: 10px 20px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #219150;
+        }
+        .food-list {
+            margin-top: 20px;
+        }
+        .food-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .food-item span {
+            flex-grow: 1;
+            margin-left: 10px;
+        }
+        .food-item button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin-left: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .food-item button.edit-btn {
+            background-color: #3498db;
+        }
+        .food-item button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Shoppy Bazaar</h1>
+    
+    <div class="form-container">
+        <input type="text" id="foodInput" placeholder="Enter your wish">
+        <button onclick="addFood()">Add item</button>
+    </div>
+
+    <ul class="food-list" id="foodList">
+        <!-- Dynamic list items will be appended here -->
+    </ul>
+</div>
+
+<script>
+    let foodItems = [];
+    let editIndex = null;
+
+    // Function to add a food item
+    function addFood() {
+        const foodInput = document.getElementById("foodInput");
+        const foodName = foodInput.value.trim();
+
+        if (foodName === '') {
+            alert('Please enter a valid food item!');
+            return;
+        }
+
+        if (editIndex !== null) {
+            // Update food item
+            foodItems[editIndex] = foodName;
+            editIndex = null;
+        } else {
+            // Create new food item
+            foodItems.push(foodName);
+        }
+
+        foodInput.value = '';
+        renderFoodList();
+    }
+
+    // Function to render the list of food items
+    function renderFoodList() {
+        const foodList = document.getElementById("foodList");
+        foodList.innerHTML = '';
+
+        foodItems.forEach((item, index) => {
+            const listItem = document.createElement("li");
+            listItem.classList.add("food-item");
+
+            listItem.innerHTML = `
+                <span>${item}</span>
+                <button class="edit-btn" onclick="editFood(${index})">Edit</button>
+                <button onclick="deleteFood(${index})">Delete</button>
+            `;
+            foodList.appendChild(listItem);
+        });
+    }
+
+    // Function to delete a food item
+    function deleteFood(index) {
+        foodItems.splice(index, 1);
+        renderFoodList();
+    }
+
+    // Function to edit a food item
+    function editFood(index) {
+        const foodInput = document.getElementById("foodInput");
+        foodInput.value = foodItems[index];
+        editIndex = index;
+    }
+</script>
+
+</body>
+</html>
+
+
+
